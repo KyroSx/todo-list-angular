@@ -1,6 +1,7 @@
 import { TodoComponent } from './todo.component';
 import { ComponentSut } from '../testing/ComponentSut';
 import { fakeAsync } from '@angular/core/testing';
+import { TodoBlank } from '../errors';
 
 class Sut extends ComponentSut<TodoComponent> {
   constructor() {
@@ -9,6 +10,10 @@ class Sut extends ComponentSut<TodoComponent> {
 
   get add_todo_input() {
     return this.getElement<HTMLInputElement>('.add_todo_input');
+  }
+
+  get error_message() {
+    return this.getElement<HTMLInputElement>('.error_message');
   }
 
   get add_todo_button() {
@@ -134,4 +139,27 @@ describe('TodoComponent', () => {
       expect(sut.getTodoCheckbox(todo).checked).toBe(false);
     });
   }));
+
+  it('displays error message if todo is blank', () => {
+    const BLANK = '';
+    const TODO = 'TODO #1';
+
+    sut.typeOnAddTodoInput(BLANK);
+    sut.detectChanges();
+
+    sut.clickOnTodoButton();
+    sut.detectChanges();
+
+    expect(sut.add_todo_input).toHaveClass('add_todo_input_error');
+    expect(sut.error_message.textContent).toContain(TodoBlank.message);
+
+    sut.typeOnAddTodoInput(TODO);
+    sut.detectChanges();
+
+    sut.clickOnTodoButton();
+    sut.detectChanges();
+
+    expect(sut.add_todo_input).not.toHaveClass('add_todo_input_error');
+    expect(sut.error_message).toBeNull();
+  });
 });

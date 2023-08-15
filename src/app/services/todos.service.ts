@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Todo } from '../models';
+import { TodoBlank } from '../errors';
 
 @Injectable({
   providedIn: 'root',
@@ -8,6 +9,8 @@ export class TodosService {
   public todos: Todo[] = [];
 
   addTodo(title: string) {
+    this.validateTodo(title);
+
     this.todos.push({
       title,
       completed: false,
@@ -44,5 +47,15 @@ export class TodosService {
 
   private removeByIndex(index: number) {
     this.todos.splice(index, 1);
+  }
+
+  private validateTodo(title: string) {
+    if (this.isEmpty(title)) {
+      throw new TodoBlank();
+    }
+  }
+
+  private isEmpty(title: string) {
+    return title === '';
   }
 }

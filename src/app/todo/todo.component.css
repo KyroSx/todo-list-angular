@@ -1,13 +1,20 @@
 .add_todo_container {
   display: flex;
-  align-items: center;
-  margin-bottom: 16px;
+  flex-direction: row;
+  justify-content: space-between;
 
-  gap: 10px;
+  gap: 12px;
+}
+
+.add_todo_input_container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  width: 100%;
 }
 
 .add_todo_input {
-  flex: 1;
   padding: 16px;
   outline: none;
 
@@ -24,17 +31,29 @@
   box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.3);
 }
 
+.add_todo_input_error {
+  border-color: var(--warn-color);
+}
+
+.error_message {
+  font-size: 16px;
+  color: var(--warn-color);
+}
+
 .add_todo_button {
   font-size: var(--font-size-base);
   color: var(--background-light-color);
   font-weight: bold;
   cursor: pointer;
+  white-space: nowrap;
 
   border: none;
   border-radius: 6px;
 
   background: var(--primary-color);
   padding: 14px 20px;
+
+  height: 54px;
 }
 
 .add_todo_button:hover {
