@@ -13,4 +13,20 @@ export class TodosService {
       completed: false,
     });
   }
+
+  toggleTodo(todo: Todo) {
+    const foundTodo = this.findTodo(todo);
+
+    if (foundTodo) {
+      this.toggleComplete(todo);
+    }
+  }
+
+  private toggleComplete(todo: Todo) {
+    todo.completed = !todo.completed;
+  }
+
+  private findTodo(todo: Todo) {
+    return this.todos.find(_todo => _todo === todo);
+  }
 }

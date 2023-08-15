@@ -22,12 +22,20 @@ class Sut extends ComponentSut<TodoComponent> {
     return todo.querySelector('.todo_item_checkbox')!;
   }
 
+  getTodoTitle(todo: HTMLDivElement): HTMLSpanElement {
+    return todo.querySelector('span')!;
+  }
+
   clickOnTodoButton() {
     this.dispatchClickEvent(this.add_todo_button);
   }
 
   typeOnAddTodoInput(title: string) {
     this.dispatchInputEvent(this.add_todo_input, title);
+  }
+
+  toggleTodo(todo: HTMLDivElement) {
+    this.dispatchClickEvent(this.getTodoCheckbox(todo));
   }
 }
 
@@ -60,6 +68,34 @@ describe('TodoComponent', () => {
     sut.todo_list.forEach((todo, index) => {
       expect(todo.textContent).toContain(todos[index]);
       expect(sut.getTodoCheckbox(todo).checked).toBe(false);
+    });
+  });
+
+  it('toggles todos', () => {
+    const todos = ['TODO #1', 'TODO #2', 'TODO #3'];
+
+    todos.forEach(todo => {
+      sut.typeOnAddTodoInput(todo);
+      sut.detectChanges();
+
+      expect(sut.add_todo_input.value).toBe(todo);
+
+      sut.clickOnTodoButton();
+      sut.detectChanges();
+    });
+
+    sut.todo_list.forEach(todo => {
+      sut.toggleTodo(todo);
+      sut.detectChanges();
+
+      expect(sut.getTodoCheckbox(todo).checked).toBe(true);
+      expect(sut.getTodoTitle(todo)).toHaveClass('todo_item_completed');
+
+      sut.toggleTodo(todo);
+      sut.detectChanges();
+
+      expect(sut.getTodoCheckbox(todo).checked).toBe(false);
+      expect(sut.getTodoTitle(todo)).not.toHaveClass('todo_item_completed');
     });
   });
 });

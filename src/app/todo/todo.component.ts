@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TodosService } from '../services/todos.service';
+import { Todo } from '../models';
 
 @Component({
   selector: 'app-todo',
@@ -13,5 +14,9 @@ export class TodoComponent {
 
   addTodo() {
     this.todos.addTodo(this.todoTitle);
+  }
+
+  toggleTodo(todo: Todo) {
+    this.todos.toggleTodo(todo);
   }
 }
