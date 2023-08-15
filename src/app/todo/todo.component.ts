@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TodosService } from '../services/todos.service';
 import { Todo } from '../models';
 import { TodoBlank } from '../errors';
+import { AddTodoFormService } from '../services/add-todo-form.service';
 
 @Component({
   selector: 'app-todo',
@@ -9,18 +10,18 @@ import { TodoBlank } from '../errors';
   styleUrls: ['./todo.component.css'],
 })
 export class TodoComponent {
-  todoTitle = '';
-  errorMessage = '';
-
-  constructor(public todos: TodosService) {}
+  constructor(
+    public todos: TodosService,
+    public form: AddTodoFormService
+  ) {}
 
   addTodo() {
     try {
-      this.errorMessage = '';
-      this.todos.addTodo(this.todoTitle);
+      this.form.resetErrorMessage();
+      this.todos.addTodo(this.form.todoTitle);
     } catch (error) {
       if (error instanceof TodoBlank) {
-        this.errorMessage = error.message;
+        this.form.setErrorMessage(error.message);
       }
     }
   }

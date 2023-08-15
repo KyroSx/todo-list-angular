@@ -13,7 +13,7 @@ class Sut extends ComponentSut<TodoComponent> {
   }
 
   get error_message() {
-    return this.getElement<HTMLInputElement>('.error_message');
+    return this.getElement<HTMLSpanElement>('.error_message');
   }
 
   get add_todo_button() {
@@ -21,7 +21,13 @@ class Sut extends ComponentSut<TodoComponent> {
   }
 
   get todo_list() {
-    return this.getAllElements<HTMLDivElement>('.todo_item');
+    const list = this.getAllElements<HTMLDivElement>('.todo_item');
+
+    if (!list || list.length === 0) {
+      throw new Error('List is Empty');
+    }
+
+    return list;
   }
 
   getTodoCheckbox(todo: HTMLDivElement): HTMLInputElement {
@@ -140,7 +146,7 @@ describe('TodoComponent', () => {
     });
   }));
 
-  it('displays error message if todo is blank', () => {
+  it('displays error message if todo is blank', fakeAsync(() => {
     const BLANK = '';
     const TODO = 'TODO #1';
 
@@ -148,6 +154,9 @@ describe('TodoComponent', () => {
     sut.detectChanges();
 
     sut.clickOnTodoButton();
+    sut.detectChanges();
+
+    sut.tick();
     sut.detectChanges();
 
     expect(sut.add_todo_input).toHaveClass('add_todo_input_error');
@@ -159,7 +168,10 @@ describe('TodoComponent', () => {
     sut.clickOnTodoButton();
     sut.detectChanges();
 
+    sut.tick();
+    sut.detectChanges();
+
     expect(sut.add_todo_input).not.toHaveClass('add_todo_input_error');
     expect(sut.error_message).toBeNull();
-  });
+  }));
 });

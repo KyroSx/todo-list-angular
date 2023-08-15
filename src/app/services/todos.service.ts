@@ -50,12 +50,12 @@ export class TodosService {
   }
 
   private validateTodo(title: string) {
-    if (this.isEmpty(title)) {
+    if (this.isBlank(title)) {
       throw new TodoBlank();
     }
   }
 
-  private isEmpty(title: string) {
+  private isBlank(title: string) {
     return title === '';
   }
 }
