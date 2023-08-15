@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 
 import { TodoRoutingModule } from './todo-routing.module';
 import { TodoComponent } from './todo.component';
-import { FormsModule } from '@angular/forms';
+import { SharedComponentsModule } from '../components';
 
 @NgModule({
   declarations: [TodoComponent],
-  imports: [CommonModule, TodoRoutingModule, FormsModule],
+  imports: [CommonModule, TodoRoutingModule, SharedComponentsModule],
 })
 export class TodoModule {}

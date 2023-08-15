@@ -1,5 +1,6 @@
 import { TodoComponent } from './todo.component';
 import { ComponentSut } from '../testing/ComponentSut';
+import { fakeAsync } from '@angular/core/testing';
 
 class Sut extends ComponentSut<TodoComponent> {
   constructor() {
@@ -24,6 +25,12 @@ class Sut extends ComponentSut<TodoComponent> {
 
   getTodoTitle(todo: HTMLDivElement): HTMLSpanElement {
     return todo.querySelector('span')!;
+  }
+
+  removeTodo(todo: HTMLDivElement) {
+    const remove = todo.querySelector('.todo_item_remove')!;
+
+    this.dispatchClickEvent(remove as HTMLElement);
   }
 
   clickOnTodoButton() {
@@ -53,9 +60,9 @@ describe('TodoComponent', () => {
   });
 
   it('adds todos', () => {
-    const todos = ['TODO #1', 'TODO #2', 'TODO #3'];
+    const TODOS = ['TODO #1', 'TODO #2', 'TODO #3'];
 
-    todos.forEach(todo => {
+    TODOS.forEach(todo => {
       sut.typeOnAddTodoInput(todo);
       sut.detectChanges();
 
@@ -66,23 +73,24 @@ describe('TodoComponent', () => {
     });
 
     sut.todo_list.forEach((todo, index) => {
-      expect(todo.textContent).toContain(todos[index]);
+      expect(todo.textContent).toContain(TODOS[index]);
       expect(sut.getTodoCheckbox(todo).checked).toBe(false);
     });
   });
 
-  it('toggles todos', () => {
-    const todos = ['TODO #1', 'TODO #2', 'TODO #3'];
+  it('toggles todos', fakeAsync(() => {
+    const TODOS = ['TODO #1', 'TODO #2', 'TODO #3'];
 
-    todos.forEach(todo => {
+    TODOS.forEach(todo => {
       sut.typeOnAddTodoInput(todo);
       sut.detectChanges();
-
-      expect(sut.add_todo_input.value).toBe(todo);
 
       sut.clickOnTodoButton();
       sut.detectChanges();
     });
+
+    sut.tick();
+    sut.detectChanges();
 
     sut.todo_list.forEach(todo => {
       sut.toggleTodo(todo);
@@ -97,5 +105,33 @@ describe('TodoComponent', () => {
       expect(sut.getTodoCheckbox(todo).checked).toBe(false);
       expect(sut.getTodoTitle(todo)).not.toHaveClass('todo_item_completed');
     });
-  });
+  }));
+
+  it('removes todos', fakeAsync(() => {
+    const REMOVED_INDEX = [1, 3];
+    const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
+
+    TODOS.forEach(todo => {
+      sut.typeOnAddTodoInput(todo);
+      sut.detectChanges();
+
+      sut.clickOnTodoButton();
+      sut.detectChanges();
+    });
+
+    sut.tick();
+    sut.detectChanges();
+
+    REMOVED_INDEX.forEach(index => {
+      sut.removeTodo(sut.todo_list[index]);
+      sut.detectChanges();
+
+      TODOS.splice(index, 1);
+    });
+
+    sut.todo_list.forEach((todo, index) => {
+      expect(todo.textContent).toContain(TODOS[index]);
+      expect(sut.getTodoCheckbox(todo).checked).toBe(false);
+    });
+  }));
 });

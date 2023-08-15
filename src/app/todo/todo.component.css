@@ -70,9 +70,21 @@
 .todo_item_checkbox {
   width: 30px;
   height: 30px;
+
+  cursor: pointer;
 }
 
 .todo_item_completed {
   color: var(--secondary-color);
   text-decoration: line-through;
 }
+
+.todo_item_remove {
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.todo_item_remove:hover {
+  color: var(--warn-color);
+}
+

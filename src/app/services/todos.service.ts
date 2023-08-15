@@ -22,11 +22,27 @@ export class TodosService {
     }
   }
 
+  removeTodo(todo: Todo) {
+    const foundTodo = this.findTodo(todo);
+
+    if (foundTodo) {
+      this.removeByIndex(this.getIndex(foundTodo));
+    }
+  }
+
   private toggleComplete(todo: Todo) {
     todo.completed = !todo.completed;
   }
 
   private findTodo(todo: Todo) {
     return this.todos.find(_todo => _todo === todo);
+  }
+
+  private getIndex(todo: Todo) {
+    return this.todos.indexOf(todo);
+  }
+
+  private removeByIndex(index: number) {
+    this.todos.splice(index, 1);
   }
 }
