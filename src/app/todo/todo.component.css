@@ -53,11 +53,33 @@
   background: var(--primary-color);
   padding: 14px 20px;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
   height: 54px;
 }
 
 .add_todo_button:hover {
   background-color: var(--primary-color-strong);
+}
+
+.filter_container {
+  margin-top: 18px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  text-align: center;
+
+  height: 40px;
+}
+
+.filter_text {
+  font-size: 16px;
+  margin-right: 12px;
 }
 
 
