@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { TodosService } from '../services/todos.service';
 import { Todo } from '../models';
+import { TodoBlank } from '../errors';
+import { AddTodoFormService } from '../services/add-todo-form.service';
 
 @Component({
   selector: 'app-todo',
@@ -8,12 +10,20 @@ import { Todo } from '../models';
   styleUrls: ['./todo.component.css'],
 })
 export class TodoComponent {
-  todoTitle = '';
-
-  constructor(public todos: TodosService) {}
+  constructor(
+    public todos: TodosService,
+    public form: AddTodoFormService
+  ) {}
 
   addTodo() {
-    this.todos.addTodo(this.todoTitle);
+    try {
+      this.form.resetErrorMessage();
+      this.todos.addTodo(this.form.todoTitle);
+    } catch (error) {
+      if (error instanceof TodoBlank) {
+        this.form.setErrorMessage(error.message);
+      }
+    }
   }
 
   toggleTodo(todo: Todo) {

@@ -1,8 +1,17 @@
 <div class="add_todo_container">
-  <input
-    class="add_todo_input"
-    placeholder="Enter todo..."
-    [(ngModel)]="todoTitle" />
+  <div class="add_todo_input_container">
+    <input
+      [ngClass]="{
+        add_todo_input: true,
+        add_todo_input_error: form.errorMessage
+      }"
+      placeholder="Enter todo..."
+      [(ngModel)]="form.todoTitle" />
+
+    <span class="error_message" *ngIf="form.errorMessage">
+      {{ form.errorMessage }}
+    </span>
+  </div>
 
   <button class="add_todo_button" (click)="addTodo()">Add Todo</button>
 </div>
@@ -23,7 +32,7 @@
 
     <mat-icon
       class="todo_item_remove"
-      fontIcon="close"
+      fontIcon="delete"
       aria-label="Remove todo"
       (click)="removeTodo(todo)" />
   </div>

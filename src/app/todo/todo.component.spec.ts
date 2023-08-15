@@ -1,6 +1,7 @@
 import { TodoComponent } from './todo.component';
 import { ComponentSut } from '../testing/ComponentSut';
 import { fakeAsync } from '@angular/core/testing';
+import { TodoBlank } from '../errors';
 
 class Sut extends ComponentSut<TodoComponent> {
   constructor() {
@@ -11,12 +12,22 @@ class Sut extends ComponentSut<TodoComponent> {
     return this.getElement<HTMLInputElement>('.add_todo_input');
   }
 
+  get error_message() {
+    return this.getElement<HTMLSpanElement>('.error_message');
+  }
+
   get add_todo_button() {
     return this.getElement<HTMLButtonElement>('.add_todo_button');
   }
 
   get todo_list() {
-    return this.getAllElements<HTMLDivElement>('.todo_item');
+    const list = this.getAllElements<HTMLDivElement>('.todo_item');
+
+    if (!list || list.length === 0) {
+      throw new Error('List is Empty');
+    }
+
+    return list;
   }
 
   getTodoCheckbox(todo: HTMLDivElement): HTMLInputElement {
@@ -133,5 +144,34 @@ describe('TodoComponent', () => {
       expect(todo.textContent).toContain(TODOS[index]);
       expect(sut.getTodoCheckbox(todo).checked).toBe(false);
     });
+  }));
+
+  it('displays error message if todo is blank', fakeAsync(() => {
+    const BLANK = '';
+    const TODO = 'TODO #1';
+
+    sut.typeOnAddTodoInput(BLANK);
+    sut.detectChanges();
+
+    sut.clickOnTodoButton();
+    sut.detectChanges();
+
+    sut.tick();
+    sut.detectChanges();
+
+    expect(sut.add_todo_input).toHaveClass('add_todo_input_error');
+    expect(sut.error_message.textContent).toContain(TodoBlank.message);
+
+    sut.typeOnAddTodoInput(TODO);
+    sut.detectChanges();
+
+    sut.clickOnTodoButton();
+    sut.detectChanges();
+
+    sut.tick();
+    sut.detectChanges();
+
+    expect(sut.add_todo_input).not.toHaveClass('add_todo_input_error');
+    expect(sut.error_message).toBeNull();
   }));
 });
