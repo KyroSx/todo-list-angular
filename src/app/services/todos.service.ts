@@ -5,12 +5,12 @@ import { Todo } from '../models';
   providedIn: 'root',
 })
 export class TodosService {
-  public todos: Todo[] = [
-    { title: 'Todo #1', completed: true },
-    { title: 'Todo #2', completed: false },
-  ];
+  public todos: Todo[] = [];
 
-  addTodo(todo: Todo) {
-    this.todos.push(todo);
+  addTodo(title: string) {
+    this.todos.push({
+      title,
+      completed: false,
+    });
   }
 }

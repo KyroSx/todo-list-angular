@@ -7,5 +7,11 @@ import { TodosService } from '../services/todos.service';
   styleUrls: ['./todo.component.css'],
 })
 export class TodoComponent {
+  todoTitle = '';
+
   constructor(public todos: TodosService) {}
+
+  addTodo() {
+    this.todos.addTodo(this.todoTitle);
+  }
 }

@@ -1,7 +1,10 @@
 <div class="add_todo_container">
-  <input class="add_todo_input" placeholder="Enter todo..." />
+  <input
+    class="add_todo_input"
+    placeholder="Enter todo..."
+    [(ngModel)]="todoTitle" />
 
-  <button class="add_todo_button">Add Todo</button>
+  <button class="add_todo_button" (click)="addTodo()">Add Todo</button>
 </div>
 
 <div class="todo_list">
