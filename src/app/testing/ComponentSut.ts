@@ -2,6 +2,7 @@ import {
   ComponentFixture,
   ComponentFixtureAutoDetect,
   TestBed,
+  tick,
 } from '@angular/core/testing';
 import { Type } from '@angular/core';
 import { SharedComponentsModule } from '../components';
@@ -25,6 +26,10 @@ export class ComponentSut<Component> {
 
   detectChanges() {
     this.fixture.detectChanges();
+  }
+
+  tick() {
+    tick();
   }
 
   protected dispatchInputEvent(input: HTMLInputElement, value: string) {

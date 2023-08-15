@@ -19,4 +19,8 @@ export class TodoComponent {
   toggleTodo(todo: Todo) {
     this.todos.toggleTodo(todo);
   }
+
+  removeTodo(todo: Todo) {
+    this.todos.removeTodo(todo);
+  }
 }
