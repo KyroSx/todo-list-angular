@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [],
-  imports: [],
-  exports: [],
+  imports: [FormsModule],
+  exports: [FormsModule],
 })
 export class SharedComponentsModule {}

@@ -40,3 +40,39 @@
 .add_todo_button:hover {
   background-color: var(--primary-color-strong);
 }
+
+
+.todo_list {
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  padding: 20px 0;
+  border-bottom: 2px solid var(--background2-color);
+}
+
+.todo_item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 8px;
+}
+
+.todo_item_info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.todo_item_checkbox {
+  width: 30px;
+  height: 30px;
+}
+
+.todo_item_completed {
+  color: var(--secondary-color);
+  text-decoration: line-through;
+}

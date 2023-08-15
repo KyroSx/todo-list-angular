@@ -1,4 +1,4 @@
-export interface Appointment {
+export interface Todo {
   title: string;
-  date: Date;
+  completed: boolean;
 }

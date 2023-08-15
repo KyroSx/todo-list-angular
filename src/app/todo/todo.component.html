@@ -1,5 +1,25 @@
 <div class="add_todo_container">
-  <input class="add_todo_input" placeholder="Enter todo..." />
+  <input
+    class="add_todo_input"
+    placeholder="Enter todo..."
+    [(ngModel)]="todoTitle" />
 
-  <button class="add_todo_button">Add Todo</button>
+  <button class="add_todo_button" (click)="addTodo()">Add Todo</button>
+</div>
+
+<div class="todo_list">
+  <div class="todo_item" *ngFor="let todo of todos.todos">
+    <div class="todo_item_info">
+      <input
+        class="todo_item_checkbox"
+        type="checkbox"
+        [checked]="todo.completed" />
+
+      <span [ngClass]="{ todo_item_completed: todo.completed }">
+        {{ todo.title }}
+      </span>
+    </div>
+
+    <div>remove</div>
+  </div>
 </div>
