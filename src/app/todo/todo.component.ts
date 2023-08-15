@@ -1,14 +1,8 @@
 import { Component } from '@angular/core';
 import { TodosService } from '../services/todos.service';
-import { Todo } from '../models';
+import { Filter, Todo } from '../models';
 import { TodoBlank } from '../errors';
 import { AddTodoFormService } from '../services/add-todo-form.service';
-
-enum Filter {
-  ALL = 'ALL',
-  COMPLETED = 'COMPLETED',
-  UNCOMPLETED = 'UNCOMPLETED',
-}
 
 @Component({
   selector: 'app-todo',
@@ -38,7 +32,7 @@ export class TodoComponent {
 
   toggleTodo(todo: Todo) {
     this.todos.toggleTodo(todo);
-    this.viewAll();
+    this.keepFilter();
   }
 
   removeTodo(todo: Todo) {
@@ -51,6 +45,10 @@ export class TodoComponent {
     this.filter = Filter.ALL;
   }
 
+  keepFilter() {
+    this.applyFilter(this.filter);
+  }
+
   applyFilter(filter: Filter) {
     switch (filter) {
       case Filter.ALL:
@@ -58,7 +56,9 @@ export class TodoComponent {
       case Filter.COMPLETED:
         return this.todos.filterByCompleted();
       case Filter.UNCOMPLETED:
-        this.todos.filterByUncompleted();
+        return this.todos.filterByUncompleted();
+      default:
+        return;
     }
   }
 }

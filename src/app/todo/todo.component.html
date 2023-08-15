@@ -19,7 +19,7 @@
   </button>
 </div>
 
-<div class="filter_container">
+<div class="filter_container" *ngIf="todos.hasTodos">
   <div class="filter_text">Filter by</div>
 
   <mat-button-toggle-group

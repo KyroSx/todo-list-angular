@@ -9,6 +9,14 @@ export class TodosService {
   private readonly todos: Todo[] = [];
   public displayableTodos: Todo[] = [];
 
+  get hasTodos() {
+    return this.todos.length > 0;
+  }
+
+  get hasNoDisplayableTodos() {
+    return this.displayableTodos.length <= 0;
+  }
+
   addTodo(title: string) {
     this.validateTodo(title);
 

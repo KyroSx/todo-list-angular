@@ -67,6 +67,8 @@
 
 .filter_container {
   margin-top: 18px;
+  margin-bottom: 8px;
+  margin-right: 4px;
 
   display: flex;
   flex-direction: row;
@@ -88,7 +90,6 @@
   flex-direction: column;
   font-size: 20px;
   padding: 20px 0;
-  border-bottom: 2px solid var(--background2-color);
 }
 
 .todo_item {
