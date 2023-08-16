@@ -13,6 +13,10 @@ class Sut extends ComponentSut<TodoComponent> {
     return this.getElement<HTMLInputElement>('.add_todo_input');
   }
 
+  get empty_state() {
+    return this.getElement<HTMLDivElement>('.empty_state');
+  }
+
   get error_message() {
     return this.getElement<HTMLSpanElement>('.error_message');
   }
@@ -269,5 +273,24 @@ describe('TodoComponent', () => {
     sut.todo_list.forEach((todo, index) => {
       expect(todo.textContent).toContain(TODOS[index]);
     });
+  });
+
+  it('shows empty state if there is no todos on filter', () => {
+    const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
+
+    TODOS.forEach(todo => {
+      sut.typeOnAddTodoInput(todo);
+      sut.detectChanges();
+
+      sut.clickOnTodoButton();
+      sut.detectChanges();
+    });
+
+    expect(sut.empty_state).toBeNull();
+
+    sut.filterByCompleted();
+    sut.detectChanges();
+
+    expect(sut.empty_state).toBeDefined();
   });
 });
