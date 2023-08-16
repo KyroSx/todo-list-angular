@@ -68,8 +68,8 @@ export class TodoComponent {
     this.modal
       .open()
       .afterClosed()
-      .subscribe(ok => {
-        if (ok) {
+      .subscribe(confirm => {
+        if (confirm) {
           this.todos.removeTodo(todo);
         }
       });

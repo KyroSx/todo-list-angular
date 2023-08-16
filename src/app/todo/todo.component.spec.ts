@@ -47,22 +47,6 @@ class Sut extends ComponentSut<TodoComponent> {
     return todo.querySelector('span')!;
   }
 
-  removeTodo(todo: HTMLDivElement) {
-    this.openModal(todo);
-    this.clickConfirm();
-  }
-
-  openModal(todo: HTMLDivElement) {
-    const remove = todo.querySelector('.todo_item_remove')!;
-
-    this.dispatchClickEvent(remove as HTMLElement);
-  }
-
-  clickConfirm() {
-    console.log(this.confirm_button);
-    this.dispatchClickEvent(this.confirm_button);
-  }
-
   get confirm_button() {
     return this.getElement<HTMLButtonElement>('#confirmation_modal_confirm');
   }
