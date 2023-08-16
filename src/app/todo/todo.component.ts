@@ -43,9 +43,9 @@ export class TodoComponent {
     this.viewAll();
   }
 
-  private openModal(todo: Todo) {
+  openModal(todo: Todo) {
     const dialogRef = this.dialog.open(ConfirmationModalComponent, {
-      width: '300px',
+      width: '400px',
     });
 
     dialogRef.afterClosed().subscribe(ok => {

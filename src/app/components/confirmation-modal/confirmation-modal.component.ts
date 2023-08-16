@@ -1,5 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-confirmation-modal',
@@ -7,8 +7,5 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./confirmation-modal.component.css'],
 })
 export class ConfirmationModalComponent {
-  constructor(
-    public dialogRef: MatDialogRef<ConfirmationModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { title: string; message: string }
-  ) {}
+  constructor(public dialogRef: MatDialogRef<ConfirmationModalComponent>) {}
 }
