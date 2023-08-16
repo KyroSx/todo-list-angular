@@ -3,6 +3,7 @@ import { TodosService } from '../services/todos.service';
 import { Filter, Todo } from '../models';
 import { TodoBlank } from '../errors';
 import { AddTodoFormService } from '../services/add-todo-form.service';
+import { FilterService } from '../services/filter.service';
 
 @Component({
   selector: 'app-todo',
@@ -10,11 +11,10 @@ import { AddTodoFormService } from '../services/add-todo-form.service';
   styleUrls: ['./todo.component.css'],
 })
 export class TodoComponent {
-  filter: Filter = Filter.ALL;
-
   constructor(
     public todos: TodosService,
-    public form: AddTodoFormService
+    public form: AddTodoFormService,
+    public filter: FilterService
   ) {}
 
   addTodo() {
@@ -42,11 +42,11 @@ export class TodoComponent {
 
   viewAll() {
     this.applyFilter(Filter.ALL);
-    this.filter = Filter.ALL;
+    this.filter.setToAll();
   }
 
   keepFilter() {
-    this.applyFilter(this.filter);
+    this.applyFilter(this.filter.current);
   }
 
   applyFilter(filter: Filter) {
