@@ -232,4 +232,42 @@ describe('TodoComponent', () => {
       expect(todo.textContent).toContain(TODOS[index]);
     });
   }));
+
+  it('resets filter after adding todo', () => {
+    const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
+    const TOGGLE_INDEX = [0, 2];
+
+    expect(sut.filter_container).toBeNull();
+
+    TODOS.forEach(todo => {
+      sut.typeOnAddTodoInput(todo);
+      sut.detectChanges();
+
+      sut.clickOnTodoButton();
+      sut.detectChanges();
+    });
+
+    TOGGLE_INDEX.forEach(index => {
+      sut.toggleTodo(sut.todo_list[index]);
+      sut.detectChanges();
+    });
+
+    sut.filterByCompleted();
+    sut.detectChanges();
+
+    sut.todo_list.forEach(todo => {
+      expect(sut.getTodoCheckbox(todo).checked).toBe(true);
+    });
+
+    sut.typeOnAddTodoInput('TODO #6');
+    TODOS.push('TODO #6');
+    sut.detectChanges();
+
+    sut.clickOnTodoButton();
+    sut.detectChanges();
+
+    sut.todo_list.forEach((todo, index) => {
+      expect(todo.textContent).toContain(TODOS[index]);
+    });
+  });
 });
