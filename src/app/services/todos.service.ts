@@ -87,6 +87,6 @@ export class TodosService {
   }
 
   private isBlank(title: string) {
-    return title === '';
+    return title.trim() === '';
   }
 }

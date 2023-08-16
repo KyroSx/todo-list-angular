@@ -167,34 +167,37 @@ describe('TodoComponent', () => {
     });
   }));
 
-  it('displays error message if todo is blank', fakeAsync(() => {
-    const BLANK = '';
-    const TODO = 'TODO #1';
+  const BLANKS = ['', '        '];
 
-    sut.typeOnAddTodoInput(BLANK);
-    sut.detectChanges();
+  BLANKS.forEach(blank => {
+    it(`displays error message if todo is blank (${blank})`, fakeAsync(() => {
+      const TODO = 'TODO #1';
 
-    sut.clickOnTodoButton();
-    sut.detectChanges();
+      sut.typeOnAddTodoInput(blank);
+      sut.detectChanges();
 
-    sut.tick();
-    sut.detectChanges();
+      sut.clickOnTodoButton();
+      sut.detectChanges();
 
-    expect(sut.add_todo_input).toHaveClass('add_todo_input_error');
-    expect(sut.error_message.textContent).toContain(TodoBlank.message);
+      sut.tick();
+      sut.detectChanges();
 
-    sut.typeOnAddTodoInput(TODO);
-    sut.detectChanges();
+      expect(sut.add_todo_input).toHaveClass('add_todo_input_error');
+      expect(sut.error_message.textContent).toContain(TodoBlank.message);
 
-    sut.clickOnTodoButton();
-    sut.detectChanges();
+      sut.typeOnAddTodoInput(TODO);
+      sut.detectChanges();
 
-    sut.tick();
-    sut.detectChanges();
+      sut.clickOnTodoButton();
+      sut.detectChanges();
 
-    expect(sut.add_todo_input).not.toHaveClass('add_todo_input_error');
-    expect(sut.error_message).toBeNull();
-  }));
+      sut.tick();
+      sut.detectChanges();
+
+      expect(sut.add_todo_input).not.toHaveClass('add_todo_input_error');
+      expect(sut.error_message).toBeNull();
+    }));
+  });
 
   it('filters by completed and uncompleted', fakeAsync(() => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
@@ -275,7 +278,7 @@ describe('TodoComponent', () => {
     });
   });
 
-  it('shows empty state if there is no todos on filter', () => {
+  it('displays empty state if there is no todos on filter', () => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
 
     TODOS.forEach(todo => {
