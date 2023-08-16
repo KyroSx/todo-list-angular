@@ -6,7 +6,16 @@ import { TodoBlank } from '../errors';
   providedIn: 'root',
 })
 export class TodosService {
-  public todos: Todo[] = [];
+  private readonly todos: Todo[] = [];
+  public displayableTodos: Todo[] = [];
+
+  get hasTodos() {
+    return this.todos.length > 0;
+  }
+
+  get hasNoDisplayableTodos() {
+    return this.displayableTodos.length <= 0;
+  }
 
   addTodo(title: string) {
     this.validateTodo(title);
@@ -15,6 +24,20 @@ export class TodosService {
       title,
       completed: false,
     });
+
+    this.dispatch();
+  }
+
+  filterByCompleted() {
+    this.displayableTodos = this.todos.filter(todo => todo.completed);
+  }
+
+  filterByUncompleted() {
+    this.displayableTodos = this.todos.filter(todo => !todo.completed);
+  }
+
+  resetFilter() {
+    this.dispatch();
   }
 
   toggleTodo(todo: Todo) {
@@ -23,6 +46,8 @@ export class TodosService {
     if (foundTodo) {
       this.toggleComplete(todo);
     }
+
+    this.dispatch();
   }
 
   removeTodo(todo: Todo) {
@@ -31,6 +56,12 @@ export class TodosService {
     if (foundTodo) {
       this.removeByIndex(this.getIndex(foundTodo));
     }
+
+    this.dispatch();
+  }
+
+  private dispatch() {
+    this.displayableTodos = this.todos;
   }
 
   private toggleComplete(todo: Todo) {

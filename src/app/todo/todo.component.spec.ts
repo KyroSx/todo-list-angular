@@ -2,6 +2,7 @@ import { TodoComponent } from './todo.component';
 import { ComponentSut } from '../testing/ComponentSut';
 import { fakeAsync } from '@angular/core/testing';
 import { TodoBlank } from '../errors';
+import { Filter } from '../models';
 
 class Sut extends ComponentSut<TodoComponent> {
   constructor() {
@@ -18,6 +19,10 @@ class Sut extends ComponentSut<TodoComponent> {
 
   get add_todo_button() {
     return this.getElement<HTMLButtonElement>('.add_todo_button');
+  }
+
+  get filter_container() {
+    return this.getElement<HTMLDivElement>('.filter_container');
   }
 
   get todo_list() {
@@ -42,6 +47,18 @@ class Sut extends ComponentSut<TodoComponent> {
     const remove = todo.querySelector('.todo_item_remove')!;
 
     this.dispatchClickEvent(remove as HTMLElement);
+  }
+
+  filterByCompleted() {
+    this.component.applyFilter(Filter.COMPLETED);
+  }
+
+  filterByUncompleted() {
+    this.component.applyFilter(Filter.UNCOMPLETED);
+  }
+
+  filterByAll() {
+    this.component.applyFilter(Filter.ALL);
   }
 
   clickOnTodoButton() {
@@ -174,4 +191,83 @@ describe('TodoComponent', () => {
     expect(sut.add_todo_input).not.toHaveClass('add_todo_input_error');
     expect(sut.error_message).toBeNull();
   }));
+
+  it('filters by completed and uncompleted', fakeAsync(() => {
+    const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
+    const TOGGLE_INDEX = [0, 2];
+
+    expect(sut.filter_container).toBeNull();
+
+    TODOS.forEach(todo => {
+      sut.typeOnAddTodoInput(todo);
+      sut.detectChanges();
+
+      sut.clickOnTodoButton();
+      sut.detectChanges();
+    });
+
+    TOGGLE_INDEX.forEach(index => {
+      sut.toggleTodo(sut.todo_list[index]);
+      sut.detectChanges();
+    });
+
+    sut.filterByCompleted();
+    sut.detectChanges();
+
+    sut.todo_list.forEach(todo => {
+      expect(sut.getTodoCheckbox(todo).checked).toBe(true);
+    });
+
+    sut.filterByUncompleted();
+    sut.detectChanges();
+
+    sut.todo_list.forEach(todo => {
+      expect(sut.getTodoCheckbox(todo).checked).toBe(false);
+    });
+
+    sut.filterByAll();
+    sut.detectChanges();
+
+    sut.todo_list.forEach((todo, index) => {
+      expect(todo.textContent).toContain(TODOS[index]);
+    });
+  }));
+
+  it('resets filter after adding todo', () => {
+    const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
+    const TOGGLE_INDEX = [0, 2];
+
+    expect(sut.filter_container).toBeNull();
+
+    TODOS.forEach(todo => {
+      sut.typeOnAddTodoInput(todo);
+      sut.detectChanges();
+
+      sut.clickOnTodoButton();
+      sut.detectChanges();
+    });
+
+    TOGGLE_INDEX.forEach(index => {
+      sut.toggleTodo(sut.todo_list[index]);
+      sut.detectChanges();
+    });
+
+    sut.filterByCompleted();
+    sut.detectChanges();
+
+    sut.todo_list.forEach(todo => {
+      expect(sut.getTodoCheckbox(todo).checked).toBe(true);
+    });
+
+    sut.typeOnAddTodoInput('TODO #6');
+    TODOS.push('TODO #6');
+    sut.detectChanges();
+
+    sut.clickOnTodoButton();
+    sut.detectChanges();
+
+    sut.todo_list.forEach((todo, index) => {
+      expect(todo.textContent).toContain(TODOS[index]);
+    });
+  });
 });
