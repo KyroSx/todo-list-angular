@@ -4,6 +4,8 @@ import { Filter, Todo } from '../models';
 import { TodoBlank } from '../errors';
 import { AddTodoFormService } from '../services/add-todo-form.service';
 import { FilterService } from '../services/filter.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationModalComponent } from '../components/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-todo',
@@ -14,7 +16,8 @@ export class TodoComponent {
   constructor(
     public todos: TodosService,
     public form: AddTodoFormService,
-    public filter: FilterService
+    public filter: FilterService,
+    private dialog: MatDialog
   ) {}
 
   addTodo() {
@@ -36,8 +39,20 @@ export class TodoComponent {
   }
 
   removeTodo(todo: Todo) {
-    this.todos.removeTodo(todo);
+    this.openModal(todo);
     this.viewAll();
+  }
+
+  private openModal(todo: Todo) {
+    const dialogRef = this.dialog.open(ConfirmationModalComponent, {
+      width: '300px',
+    });
+
+    dialogRef.afterClosed().subscribe(ok => {
+      if (ok) {
+        this.todos.removeTodo(todo);
+      }
+    });
   }
 
   viewAll() {
