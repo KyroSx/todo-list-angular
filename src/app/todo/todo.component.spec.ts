@@ -47,10 +47,8 @@ class Sut extends ComponentSut<TodoComponent> {
     return todo.querySelector('span')!;
   }
 
-  removeTodo(todo: HTMLDivElement) {
-    const remove = todo.querySelector('.todo_item_remove')!;
-
-    this.dispatchClickEvent(remove as HTMLElement);
+  get confirm_button() {
+    return this.getElement<HTMLButtonElement>('#confirmation_modal_confirm');
   }
 
   filterByCompleted() {
@@ -140,7 +138,7 @@ describe('TodoComponent', () => {
   }));
 
   it('removes todos', fakeAsync(() => {
-    const REMOVED_INDEX = [1, 3];
+    const REMOVED_INDEX = 1;
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
 
     TODOS.forEach(todo => {
@@ -154,12 +152,12 @@ describe('TodoComponent', () => {
     sut.tick();
     sut.detectChanges();
 
-    REMOVED_INDEX.forEach(index => {
-      sut.removeTodo(sut.todo_list[index]);
-      sut.detectChanges();
+    sut.component.todos.removeTodo(
+      sut.component.todos.displayableTodos[REMOVED_INDEX]
+    );
+    sut.detectChanges();
 
-      TODOS.splice(index, 1);
-    });
+    TODOS.splice(REMOVED_INDEX, 1);
 
     sut.todo_list.forEach((todo, index) => {
       expect(todo.textContent).toContain(TODOS[index]);

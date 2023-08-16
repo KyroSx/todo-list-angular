@@ -3,6 +3,8 @@ import { TodosService } from '../services/todos.service';
 import { Filter, Todo } from '../models';
 import { TodoBlank } from '../errors';
 import { AddTodoFormService } from '../services/add-todo-form.service';
+import { FilterService } from '../services/filter.service';
+import { ConfirmationModalService } from '../services/confirmation-modal.service';
 
 @Component({
   selector: 'app-todo',
@@ -10,11 +12,11 @@ import { AddTodoFormService } from '../services/add-todo-form.service';
   styleUrls: ['./todo.component.css'],
 })
 export class TodoComponent {
-  filter: Filter = Filter.ALL;
-
   constructor(
     public todos: TodosService,
-    public form: AddTodoFormService
+    public form: AddTodoFormService,
+    public filter: FilterService,
+    private modal: ConfirmationModalService
   ) {}
 
   addTodo() {
@@ -36,17 +38,17 @@ export class TodoComponent {
   }
 
   removeTodo(todo: Todo) {
-    this.todos.removeTodo(todo);
+    this.openModalThenRemove(todo);
     this.viewAll();
   }
 
   viewAll() {
     this.applyFilter(Filter.ALL);
-    this.filter = Filter.ALL;
+    this.filter.setToAll();
   }
 
   keepFilter() {
-    this.applyFilter(this.filter);
+    this.applyFilter(this.filter.current);
   }
 
   applyFilter(filter: Filter) {
@@ -60,5 +62,16 @@ export class TodoComponent {
       default:
         return;
     }
+  }
+
+  private openModalThenRemove(todo: Todo) {
+    this.modal
+      .open()
+      .afterClosed()
+      .subscribe(confirm => {
+        if (confirm) {
+          this.todos.removeTodo(todo);
+        }
+      });
   }
 }
