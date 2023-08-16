@@ -168,7 +168,7 @@ describe('TodoComponent', () => {
   }));
 
   it('displays error message if todo is blank', fakeAsync(() => {
-    const BLANK = '';
+    const BLANK = '   ';
     const TODO = 'TODO #1';
 
     sut.typeOnAddTodoInput(BLANK);
