@@ -26,9 +26,15 @@
     name="filter"
     [(ngModel)]="filterService.current"
     (change)="getTodos()">
-    <mat-button-toggle [value]="Filter.ALL">view all</mat-button-toggle>
-    <mat-button-toggle [value]="Filter.COMPLETED">completed</mat-button-toggle>
-    <mat-button-toggle [value]="Filter.UNCOMPLETED">
+    <mat-button-toggle class="button_view_all" [value]="Filter.ALL">
+      view all
+    </mat-button-toggle>
+
+    <mat-button-toggle class="button_completed" [value]="Filter.COMPLETED">
+      completed
+    </mat-button-toggle>
+
+    <mat-button-toggle class="button_uncompleted" [value]="Filter.UNCOMPLETED">
       uncompleted
     </mat-button-toggle>
   </mat-button-toggle-group>

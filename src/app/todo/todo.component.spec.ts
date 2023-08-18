@@ -2,7 +2,6 @@ import { TodoComponent } from './todo.component';
 import { ComponentSut } from '../testing/ComponentSut';
 import { fakeAsync } from '@angular/core/testing';
 import { TodoBlank } from '../errors';
-import { Filter } from '../models';
 
 class Sut extends ComponentSut<TodoComponent> {
   constructor() {
@@ -25,8 +24,16 @@ class Sut extends ComponentSut<TodoComponent> {
     return this.getElement<HTMLButtonElement>('.add_todo_button');
   }
 
-  get filter_container() {
-    return this.getElement<HTMLDivElement>('.filter_container');
+  get filter_completed_button() {
+    return this.getElement<HTMLButtonElement>('.button_completed > button');
+  }
+
+  get filter_uncompleted_button() {
+    return this.getElement<HTMLButtonElement>('.button_uncompleted > button');
+  }
+
+  get filter_view_all_button() {
+    return this.getElement<HTMLButtonElement>('.button_view_all > button');
   }
 
   get todo_list() {
@@ -48,18 +55,15 @@ class Sut extends ComponentSut<TodoComponent> {
   }
 
   filterByCompleted() {
-    this.component.filterService.setFilter(Filter.COMPLETED);
-    this.component.getTodos();
+    this.dispatchClickEvent(this.filter_completed_button);
   }
 
   filterByUncompleted() {
-    this.component.filterService.setFilter(Filter.UNCOMPLETED);
-    this.component.getTodos();
+    this.dispatchClickEvent(this.filter_uncompleted_button);
   }
 
   filterByAll() {
-    this.component.filterService.setFilter(Filter.ALL);
-    this.component.getTodos();
+    this.dispatchClickEvent(this.filter_view_all_button);
   }
 
   clickOnTodoButton() {
