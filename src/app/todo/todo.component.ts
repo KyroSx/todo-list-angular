@@ -56,7 +56,6 @@ export class TodoComponent {
 
   removeTodo(todo: Todo) {
     this.openModalThenRemove(todo);
-    this.viewAll();
   }
 
   viewAll() {
@@ -87,8 +86,14 @@ export class TodoComponent {
       .afterClosed()
       .subscribe(confirm => {
         if (confirm) {
-          this.todosService.removeTodo(todo);
+          this.removeThenReload(todo);
         }
       });
+  }
+
+  private removeThenReload(todo: Todo) {
+    this.todosService.removeTodo(todo).subscribe(() => {
+      this.getTodos();
+    });
   }
 }

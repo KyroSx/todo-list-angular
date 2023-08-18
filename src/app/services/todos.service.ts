@@ -55,14 +55,14 @@ export class TodosService {
     return of(true);
   }
 
-  removeTodo(todo: Todo) {
+  removeTodo(todo: Todo): Observable<boolean> {
     const foundTodo = this.findTodo(todo);
 
     if (foundTodo) {
       this.removeByIndex(this.getIndex(foundTodo));
     }
 
-    this.dispatch();
+    return of(true);
   }
 
   private dispatch() {

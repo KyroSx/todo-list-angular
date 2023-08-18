@@ -47,10 +47,6 @@ class Sut extends ComponentSut<TodoComponent> {
     return todo.querySelector('span')!;
   }
 
-  get confirm_button() {
-    return this.getElement<HTMLButtonElement>('#confirmation_modal_confirm');
-  }
-
   filterByCompleted() {
     this.component.applyFilter(Filter.COMPLETED);
   }
@@ -152,10 +148,9 @@ describe('TodoComponent', () => {
     sut.tick();
     sut.detectChanges();
 
-    sut.component.todosService.removeTodo(
+    sut.component.removeTodo(
       sut.component.todosService.displayableTodos[REMOVED_INDEX]
     );
-    sut.detectChanges();
 
     TODOS.splice(REMOVED_INDEX, 1);
 
@@ -276,8 +271,10 @@ describe('TodoComponent', () => {
     });
   });
 
-  it('displays empty state if there is no todos on filter', () => {
+  fit('displays empty state if there is no todos on filter', () => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
+
+    expect(sut.empty_state).toBeDefined();
 
     TODOS.forEach(todo => {
       sut.typeOnAddTodoInput(todo);
