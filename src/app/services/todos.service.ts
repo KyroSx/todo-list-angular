@@ -10,14 +10,6 @@ export class TodosService {
   private readonly todos: Todo[] = [];
   public displayableTodos: Todo[] = [];
 
-  get hasTodos() {
-    return this.todos.length > 0;
-  }
-
-  get hasNoDisplayableTodos() {
-    return this.displayableTodos.length <= 0;
-  }
-
   getTodos(): Observable<Todo[]> {
     return of(this.todos);
   }
@@ -53,14 +45,14 @@ export class TodosService {
     this.dispatch();
   }
 
-  toggleTodo(todo: Todo) {
+  toggleTodo(todo: Todo): Observable<boolean> {
     const foundTodo = this.findTodo(todo);
 
     if (foundTodo) {
       this.toggleComplete(todo);
     }
 
-    this.dispatch();
+    return of(true);
   }
 
   removeTodo(todo: Todo) {

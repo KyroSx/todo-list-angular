@@ -27,6 +27,10 @@ export class TodoComponent {
     });
   }
 
+  get hasTodos() {
+    return this.todos.length > 0;
+  }
+
   addTodo() {
     this.form.resetErrorMessage();
 
@@ -45,8 +49,9 @@ export class TodoComponent {
   }
 
   toggleTodo(todo: Todo) {
-    this.todosService.toggleTodo(todo);
-    this.keepFilter();
+    this.todosService.toggleTodo(todo).subscribe(() => {
+      this.getTodos();
+    });
   }
 
   removeTodo(todo: Todo) {

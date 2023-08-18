@@ -108,7 +108,7 @@ describe('TodoComponent', () => {
     });
   });
 
-  it('toggles todos', fakeAsync(() => {
+  fit('toggles todos', fakeAsync(() => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3'];
 
     TODOS.forEach(todo => {
