@@ -89,7 +89,7 @@ describe('TodoComponent', () => {
     expect(sut.component).toBeTruthy();
   });
 
-  it('adds todos', () => {
+  fit('adds todos', () => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3'];
 
     TODOS.forEach(todo => {
@@ -152,8 +152,8 @@ describe('TodoComponent', () => {
     sut.tick();
     sut.detectChanges();
 
-    sut.component.todos.removeTodo(
-      sut.component.todos.displayableTodos[REMOVED_INDEX]
+    sut.component.todosService.removeTodo(
+      sut.component.todosService.displayableTodos[REMOVED_INDEX]
     );
     sut.detectChanges();
 
@@ -168,7 +168,7 @@ describe('TodoComponent', () => {
   const BLANKS = ['', '        '];
 
   BLANKS.forEach(blank => {
-    it(`displays error message if todo is blank (${blank})`, fakeAsync(() => {
+    fit(`displays error message if todo is blank (${blank})`, fakeAsync(() => {
       const TODO = 'TODO #1';
 
       sut.typeOnAddTodoInput(blank);

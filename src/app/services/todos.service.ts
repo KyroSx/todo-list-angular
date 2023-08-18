@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Todo } from '../models';
 import { TodoBlank } from '../errors';
+import { Observable, of, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -17,15 +18,27 @@ export class TodosService {
     return this.displayableTodos.length <= 0;
   }
 
-  addTodo(title: string) {
+  getTodos(): Observable<Todo[]> {
+    return of(this.todos);
+  }
+
+  addTodo(title: string): Observable<boolean> {
+    try {
+      this.addOrThrow(title);
+
+      return of(true);
+    } catch (error) {
+      return throwError(() => error);
+    }
+  }
+
+  private addOrThrow(title: string) {
     this.validateTodo(title);
 
     this.todos.push({
       title,
       completed: false,
     });
-
-    this.dispatch();
   }
 
   filterByCompleted() {

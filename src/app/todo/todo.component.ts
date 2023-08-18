@@ -12,28 +12,40 @@ import { ConfirmationModalService } from '../services/confirmation-modal.service
   styleUrls: ['./todo.component.css'],
 })
 export class TodoComponent {
+  todos: Todo[] = [];
+
   constructor(
-    public todos: TodosService,
+    public todosService: TodosService,
     public form: AddTodoFormService,
     public filter: FilterService,
     private modal: ConfirmationModalService
   ) {}
 
-  addTodo() {
-    try {
-      this.form.resetErrorMessage();
-      this.todos.addTodo(this.form.todoTitle);
-    } catch (error) {
-      if (error instanceof TodoBlank) {
-        this.form.setErrorMessage(error.message);
-      }
-    }
+  private getTodos() {
+    this.todosService.getTodos().subscribe(todos => {
+      this.todos = todos;
+    });
+  }
 
-    this.viewAll();
+  addTodo() {
+    this.form.resetErrorMessage();
+
+    this.todosService.addTodo(this.form.todoTitle).subscribe({
+      next: ok => {
+        if (ok) {
+          this.getTodos();
+        }
+      },
+      error: error => {
+        if (error instanceof TodoBlank) {
+          this.form.setErrorMessage(error.message);
+        }
+      },
+    });
   }
 
   toggleTodo(todo: Todo) {
-    this.todos.toggleTodo(todo);
+    this.todosService.toggleTodo(todo);
     this.keepFilter();
   }
 
@@ -54,11 +66,11 @@ export class TodoComponent {
   applyFilter(filter: Filter) {
     switch (filter) {
       case Filter.ALL:
-        return this.todos.resetFilter();
+        return this.todosService.resetFilter();
       case Filter.COMPLETED:
-        return this.todos.filterByCompleted();
+        return this.todosService.filterByCompleted();
       case Filter.UNCOMPLETED:
-        return this.todos.filterByUncompleted();
+        return this.todosService.filterByUncompleted();
       default:
         return;
     }
@@ -70,7 +82,7 @@ export class TodoComponent {
       .afterClosed()
       .subscribe(confirm => {
         if (confirm) {
-          this.todos.removeTodo(todo);
+          this.todosService.removeTodo(todo);
         }
       });
   }

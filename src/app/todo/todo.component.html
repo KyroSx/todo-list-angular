@@ -19,7 +19,7 @@
   </button>
 </div>
 
-<div class="filter_container" *ngIf="todos.hasTodos">
+<div class="filter_container" *ngIf="todosService.hasTodos">
   <div class="filter_text">Filter by</div>
 
   <mat-button-toggle-group
@@ -32,7 +32,9 @@
   </mat-button-toggle-group>
 </div>
 
-<div class="empty_state" *ngIf="todos.hasTodos && todos.hasNoDisplayableTodos">
+<div
+  class="empty_state"
+  *ngIf="todosService.hasTodos && todosService.hasNoDisplayableTodos">
   <mat-icon
     class="empty_icon"
     fontIcon="manage_search"
@@ -46,7 +48,7 @@
 </div>
 
 <div class="todo_list">
-  <div class="todo_item" *ngFor="let todo of todos.displayableTodos">
+  <div class="todo_item" *ngFor="let todo of todos">
     <div class="todo_item_info">
       <input
         class="todo_item_checkbox"
