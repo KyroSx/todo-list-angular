@@ -1,4 +1,11 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { TodosService } from '../services/todos.service';
 import { Filter, Todo } from '../models';
 import { TodoBlank } from '../errors';
@@ -17,12 +24,12 @@ export class TodoComponent {
   constructor(
     public todosService: TodosService,
     public form: AddTodoFormService,
-    public filter: FilterService,
+    public filterService: FilterService,
     private modal: ConfirmationModalService
   ) {}
 
-  private getTodos() {
-    this.todosService.getTodos().subscribe(todos => {
+  getTodos() {
+    this.todosService.getTodos(this.filterService.current).subscribe(todos => {
       this.todos = todos;
     });
   }
@@ -37,6 +44,7 @@ export class TodoComponent {
     this.todosService.addTodo(this.form.todoTitle).subscribe({
       next: ok => {
         if (ok) {
+          this.filterService.setToAll();
           this.getTodos();
         }
       },
@@ -58,28 +66,6 @@ export class TodoComponent {
     this.openModalThenRemove(todo);
   }
 
-  viewAll() {
-    this.applyFilter(Filter.ALL);
-    this.filter.setToAll();
-  }
-
-  keepFilter() {
-    this.applyFilter(this.filter.current);
-  }
-
-  applyFilter(filter: Filter) {
-    switch (filter) {
-      case Filter.ALL:
-        return this.todosService.resetFilter();
-      case Filter.COMPLETED:
-        return this.todosService.filterByCompleted();
-      case Filter.UNCOMPLETED:
-        return this.todosService.filterByUncompleted();
-      default:
-        return;
-    }
-  }
-
   private openModalThenRemove(todo: Todo) {
     this.modal
       .open()
@@ -96,4 +82,6 @@ export class TodoComponent {
       this.getTodos();
     });
   }
+
+  protected readonly Filter = Filter;
 }

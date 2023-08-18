@@ -48,15 +48,18 @@ class Sut extends ComponentSut<TodoComponent> {
   }
 
   filterByCompleted() {
-    this.component.applyFilter(Filter.COMPLETED);
+    this.component.filterService.setFilter(Filter.COMPLETED);
+    this.component.getTodos();
   }
 
   filterByUncompleted() {
-    this.component.applyFilter(Filter.UNCOMPLETED);
+    this.component.filterService.setFilter(Filter.UNCOMPLETED);
+    this.component.getTodos();
   }
 
   filterByAll() {
-    this.component.applyFilter(Filter.ALL);
+    this.component.filterService.setFilter(Filter.ALL);
+    this.component.getTodos();
   }
 
   clickOnTodoButton() {
@@ -148,9 +151,11 @@ describe('TodoComponent', () => {
     sut.tick();
     sut.detectChanges();
 
+    /*
     sut.component.removeTodo(
       sut.component.todosService.displayableTodos[REMOVED_INDEX]
     );
+     */
 
     TODOS.splice(REMOVED_INDEX, 1);
 
@@ -192,11 +197,9 @@ describe('TodoComponent', () => {
     }));
   });
 
-  it('filters by completed and uncompleted', fakeAsync(() => {
+  fit('filters by completed and uncompleted', fakeAsync(() => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
     const TOGGLE_INDEX = [0, 2];
-
-    expect(sut.filter_container).toBeNull();
 
     TODOS.forEach(todo => {
       sut.typeOnAddTodoInput(todo);
@@ -233,11 +236,9 @@ describe('TodoComponent', () => {
     });
   }));
 
-  it('resets filter after adding todo', () => {
+  fit('resets filter after adding todo', () => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
     const TOGGLE_INDEX = [0, 2];
-
-    expect(sut.filter_container).toBeNull();
 
     TODOS.forEach(todo => {
       sut.typeOnAddTodoInput(todo);

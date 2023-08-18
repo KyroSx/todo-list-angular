@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Todo } from '../models';
+import { Filter, Todo } from '../models';
 import { TodoBlank } from '../errors';
 import { Observable, of, throwError } from 'rxjs';
 
@@ -8,10 +8,18 @@ import { Observable, of, throwError } from 'rxjs';
 })
 export class TodosService {
   private readonly todos: Todo[] = [];
-  public displayableTodos: Todo[] = [];
 
-  getTodos(): Observable<Todo[]> {
-    return of(this.todos);
+  getTodos(filter: Filter): Observable<Todo[]> {
+    // noinspection JSUnreachableSwitchBranches
+    switch (filter) {
+      case Filter.ALL:
+      default:
+        return of(this.todos);
+      case Filter.COMPLETED:
+        return of(this.filterByCompleted());
+      case Filter.UNCOMPLETED:
+        return of(this.filterByUncompleted());
+    }
   }
 
   addTodo(title: string): Observable<boolean> {
@@ -33,16 +41,12 @@ export class TodosService {
     });
   }
 
-  filterByCompleted() {
-    this.displayableTodos = this.todos.filter(todo => todo.completed);
+  private filterByCompleted() {
+    return this.todos.filter(todo => todo.completed);
   }
 
-  filterByUncompleted() {
-    this.displayableTodos = this.todos.filter(todo => !todo.completed);
-  }
-
-  resetFilter() {
-    this.dispatch();
+  private filterByUncompleted() {
+    return this.todos.filter(todo => !todo.completed);
   }
 
   toggleTodo(todo: Todo): Observable<boolean> {
@@ -63,10 +67,6 @@ export class TodosService {
     }
 
     return of(true);
-  }
-
-  private dispatch() {
-    this.displayableTodos = this.todos;
   }
 
   private toggleComplete(todo: Todo) {
