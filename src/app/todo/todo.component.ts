@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component } from '@angular/core';
 import { TodosService } from '../services/todos.service';
 import { Filter, Todo } from '../models';
 import { TodoBlank } from '../errors';
