@@ -6,5 +6,5 @@
 
 <app-todo-list
   [todos]="todos"
-  (remove)="removeTodo($event)"
+  (refresh)="getTodos()"
   (toggle)="toggleTodo($event)" />

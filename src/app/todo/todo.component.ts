@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { TodosService } from '../services/todos.service';
-import { Filter, Todo } from '../models';
+import { Todo } from '../models';
 import { TodoBlank } from '../errors';
 import { AddTodoFormService } from '../services/add-todo-form.service';
 import { FilterService } from '../services/filter.service';
-import { ConfirmationModalService } from '../services/confirmation-modal.service';
 
 @Component({
   selector: 'app-todo',
@@ -17,8 +16,7 @@ export class TodoComponent {
   constructor(
     public todosService: TodosService,
     public form: AddTodoFormService,
-    public filterService: FilterService,
-    private modal: ConfirmationModalService
+    public filterService: FilterService
   ) {}
 
   getTodos() {
@@ -54,27 +52,4 @@ export class TodoComponent {
       this.getTodos();
     });
   }
-
-  removeTodo(todo: Todo) {
-    this.openModalThenRemove(todo);
-  }
-
-  private openModalThenRemove(todo: Todo) {
-    this.modal
-      .open()
-      .afterClosed()
-      .subscribe(confirm => {
-        if (confirm) {
-          this.removeThenReload(todo);
-        }
-      });
-  }
-
-  private removeThenReload(todo: Todo) {
-    this.todosService.removeTodo(todo).subscribe(() => {
-      this.getTodos();
-    });
-  }
-
-  protected readonly Filter = Filter;
 }
