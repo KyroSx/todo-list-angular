@@ -92,7 +92,7 @@ describe('TodoComponent', () => {
     expect(sut.component).toBeTruthy();
   });
 
-  fit('adds todos', () => {
+  it('adds todos', () => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3'];
 
     TODOS.forEach(todo => {
@@ -111,7 +111,7 @@ describe('TodoComponent', () => {
     });
   });
 
-  fit('toggles todos', fakeAsync(() => {
+  it('toggles todos', fakeAsync(() => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3'];
 
     TODOS.forEach(todo => {
@@ -155,11 +155,8 @@ describe('TodoComponent', () => {
     sut.tick();
     sut.detectChanges();
 
-    /*
-    sut.component.removeTodo(
-      sut.component.todosService.displayableTodos[REMOVED_INDEX]
-    );
-     */
+    sut.component.todosService.removeTodo(sut.component.todos[REMOVED_INDEX]);
+    sut.detectChanges();
 
     TODOS.splice(REMOVED_INDEX, 1);
 
@@ -172,7 +169,7 @@ describe('TodoComponent', () => {
   const BLANKS = ['', '        '];
 
   BLANKS.forEach(blank => {
-    fit(`displays error message if todo is blank (${blank})`, fakeAsync(() => {
+    it(`displays error message if todo is blank (${blank})`, fakeAsync(() => {
       const TODO = 'TODO #1';
 
       sut.typeOnAddTodoInput(blank);
@@ -201,7 +198,7 @@ describe('TodoComponent', () => {
     }));
   });
 
-  fit('filters by completed and uncompleted', fakeAsync(() => {
+  it('filters by completed and uncompleted', fakeAsync(() => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
     const TOGGLE_INDEX = [0, 2];
 
@@ -240,7 +237,7 @@ describe('TodoComponent', () => {
     });
   }));
 
-  fit('resets filter after adding todo', () => {
+  it('resets filter after adding todo', () => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
     const TOGGLE_INDEX = [0, 2];
 
@@ -276,7 +273,7 @@ describe('TodoComponent', () => {
     });
   });
 
-  fit('displays empty state if there is no todos on filter', () => {
+  it('displays empty state if there is no todos on filter', () => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
 
     expect(sut.empty_state).toBeDefined();
