@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { TodosService } from '../services/todos.service';
 import { Todo } from '../models';
-import { TodoBlank } from '../errors';
 import { AddTodoFormService } from '../services/add-todo-form.service';
 import { FilterService } from '../services/filter.service';
 
@@ -27,23 +26,5 @@ export class TodoComponent {
 
   get hasNoTodos() {
     return this.todos.length <= 0;
-  }
-
-  addTodo() {
-    this.form.resetErrorMessage();
-
-    this.todosService.addTodo(this.form.todoTitle).subscribe({
-      next: ok => {
-        if (ok) {
-          this.filterService.setToAll();
-          this.getTodos();
-        }
-      },
-      error: error => {
-        if (error instanceof TodoBlank) {
-          this.form.setErrorMessage(error.message);
-        }
-      },
-    });
   }
 }
