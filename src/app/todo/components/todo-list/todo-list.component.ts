@@ -33,14 +33,9 @@ export class TodoListComponent {
   }
 
   private openModalThenRemove(todo: Todo) {
-    this.modal
-      .open()
-      .afterClosed()
-      .subscribe(confirm => {
-        if (confirm) {
-          this.removeThenReload(todo);
-        }
-      });
+    this.modal.onConfirmation(() => {
+      this.removeThenReload(todo);
+    });
   }
 
   private removeThenReload(todo: Todo) {
