@@ -4,24 +4,7 @@
 
 <app-empty-state [show]="hasNoTodos" />
 
-<div class="todo_list">
-  <div class="todo_item" *ngFor="let todo of todos">
-    <div class="todo_item_info">
-      <input
-        class="todo_item_checkbox"
-        type="checkbox"
-        (click)="toggleTodo(todo)"
-        [checked]="todo.completed" />
-
-      <span [ngClass]="{ todo_item_completed: todo.completed }">
-        {{ todo.title }}
-      </span>
-    </div>
-
-    <mat-icon
-      class="todo_item_remove"
-      fontIcon="delete"
-      aria-label="Remove todo"
-      (click)="removeTodo(todo)" />
-  </div>
-</div>
+<app-todo-list
+  [todos]="todos"
+  (remove)="removeTodo($event)"
+  (toggle)="toggleTodo($event)" />
