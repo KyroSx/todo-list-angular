@@ -7,7 +7,6 @@ import { FilterService } from '../services/filter.service';
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
-  styleUrls: ['./todo.component.css'],
 })
 export class TodoComponent {
   todos: Todo[] = [];
