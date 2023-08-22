@@ -12,56 +12,51 @@ import { ConfirmationModalService } from '../services/confirmation-modal.service
   styleUrls: ['./todo.component.css'],
 })
 export class TodoComponent {
+  todos: Todo[] = [];
+
   constructor(
-    public todos: TodosService,
+    public todosService: TodosService,
     public form: AddTodoFormService,
-    public filter: FilterService,
+    public filterService: FilterService,
     private modal: ConfirmationModalService
   ) {}
 
-  addTodo() {
-    try {
-      this.form.resetErrorMessage();
-      this.todos.addTodo(this.form.todoTitle);
-    } catch (error) {
-      if (error instanceof TodoBlank) {
-        this.form.setErrorMessage(error.message);
-      }
-    }
+  getTodos() {
+    this.todosService.getTodos(this.filterService.current).subscribe(todos => {
+      this.todos = todos;
+    });
+  }
 
-    this.viewAll();
+  get hasTodos() {
+    return this.todos.length > 0;
+  }
+
+  addTodo() {
+    this.form.resetErrorMessage();
+
+    this.todosService.addTodo(this.form.todoTitle).subscribe({
+      next: ok => {
+        if (ok) {
+          this.filterService.setToAll();
+          this.getTodos();
+        }
+      },
+      error: error => {
+        if (error instanceof TodoBlank) {
+          this.form.setErrorMessage(error.message);
+        }
+      },
+    });
   }
 
   toggleTodo(todo: Todo) {
-    this.todos.toggleTodo(todo);
-    this.keepFilter();
+    this.todosService.toggleTodo(todo).subscribe(() => {
+      this.getTodos();
+    });
   }
 
   removeTodo(todo: Todo) {
     this.openModalThenRemove(todo);
-    this.viewAll();
-  }
-
-  viewAll() {
-    this.applyFilter(Filter.ALL);
-    this.filter.setToAll();
-  }
-
-  keepFilter() {
-    this.applyFilter(this.filter.current);
-  }
-
-  applyFilter(filter: Filter) {
-    switch (filter) {
-      case Filter.ALL:
-        return this.todos.resetFilter();
-      case Filter.COMPLETED:
-        return this.todos.filterByCompleted();
-      case Filter.UNCOMPLETED:
-        return this.todos.filterByUncompleted();
-      default:
-        return;
-    }
   }
 
   private openModalThenRemove(todo: Todo) {
@@ -70,8 +65,16 @@ export class TodoComponent {
       .afterClosed()
       .subscribe(confirm => {
         if (confirm) {
-          this.todos.removeTodo(todo);
+          this.removeThenReload(todo);
         }
       });
   }
+
+  private removeThenReload(todo: Todo) {
+    this.todosService.removeTodo(todo).subscribe(() => {
+      this.getTodos();
+    });
+  }
+
+  protected readonly Filter = Filter;
 }

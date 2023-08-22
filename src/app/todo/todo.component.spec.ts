@@ -2,7 +2,6 @@ import { TodoComponent } from './todo.component';
 import { ComponentSut } from '../testing/ComponentSut';
 import { fakeAsync } from '@angular/core/testing';
 import { TodoBlank } from '../errors';
-import { Filter } from '../models';
 
 class Sut extends ComponentSut<TodoComponent> {
   constructor() {
@@ -25,8 +24,16 @@ class Sut extends ComponentSut<TodoComponent> {
     return this.getElement<HTMLButtonElement>('.add_todo_button');
   }
 
-  get filter_container() {
-    return this.getElement<HTMLDivElement>('.filter_container');
+  get filter_completed_button() {
+    return this.getElement<HTMLButtonElement>('.button_completed > button');
+  }
+
+  get filter_uncompleted_button() {
+    return this.getElement<HTMLButtonElement>('.button_uncompleted > button');
+  }
+
+  get filter_view_all_button() {
+    return this.getElement<HTMLButtonElement>('.button_view_all > button');
   }
 
   get todo_list() {
@@ -47,20 +54,16 @@ class Sut extends ComponentSut<TodoComponent> {
     return todo.querySelector('span')!;
   }
 
-  get confirm_button() {
-    return this.getElement<HTMLButtonElement>('#confirmation_modal_confirm');
-  }
-
   filterByCompleted() {
-    this.component.applyFilter(Filter.COMPLETED);
+    this.dispatchClickEvent(this.filter_completed_button);
   }
 
   filterByUncompleted() {
-    this.component.applyFilter(Filter.UNCOMPLETED);
+    this.dispatchClickEvent(this.filter_uncompleted_button);
   }
 
   filterByAll() {
-    this.component.applyFilter(Filter.ALL);
+    this.dispatchClickEvent(this.filter_view_all_button);
   }
 
   clickOnTodoButton() {
@@ -152,9 +155,7 @@ describe('TodoComponent', () => {
     sut.tick();
     sut.detectChanges();
 
-    sut.component.todos.removeTodo(
-      sut.component.todos.displayableTodos[REMOVED_INDEX]
-    );
+    sut.component.todosService.removeTodo(sut.component.todos[REMOVED_INDEX]);
     sut.detectChanges();
 
     TODOS.splice(REMOVED_INDEX, 1);
@@ -201,8 +202,6 @@ describe('TodoComponent', () => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
     const TOGGLE_INDEX = [0, 2];
 
-    expect(sut.filter_container).toBeNull();
-
     TODOS.forEach(todo => {
       sut.typeOnAddTodoInput(todo);
       sut.detectChanges();
@@ -242,8 +241,6 @@ describe('TodoComponent', () => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
     const TOGGLE_INDEX = [0, 2];
 
-    expect(sut.filter_container).toBeNull();
-
     TODOS.forEach(todo => {
       sut.typeOnAddTodoInput(todo);
       sut.detectChanges();
@@ -278,6 +275,8 @@ describe('TodoComponent', () => {
 
   it('displays empty state if there is no todos on filter', () => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
+
+    expect(sut.empty_state).toBeDefined();
 
     TODOS.forEach(todo => {
       sut.typeOnAddTodoInput(todo);
