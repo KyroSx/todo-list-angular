@@ -19,26 +19,7 @@
   </button>
 </div>
 
-<div class="filter_container">
-  <div class="filter_text">Filter by</div>
-
-  <mat-button-toggle-group
-    name="filter"
-    [(ngModel)]="filterService.current"
-    (change)="getTodos()">
-    <mat-button-toggle class="button_view_all" [value]="Filter.ALL">
-      view all
-    </mat-button-toggle>
-
-    <mat-button-toggle class="button_completed" [value]="Filter.COMPLETED">
-      completed
-    </mat-button-toggle>
-
-    <mat-button-toggle class="button_uncompleted" [value]="Filter.UNCOMPLETED">
-      uncompleted
-    </mat-button-toggle>
-  </mat-button-toggle-group>
-</div>
+<app-filter (update)="getTodos()" />
 
 <div class="empty_state" *ngIf="!hasTodos">
   <mat-icon

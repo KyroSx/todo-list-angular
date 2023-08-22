@@ -6,6 +6,7 @@ import {
 } from '@angular/core/testing';
 import { Type } from '@angular/core';
 import { SharedComponentsModule } from '../components';
+import { TodoModule } from '../todo/todo.module';
 
 export class ComponentSut<Component> {
   component!: Component;
@@ -52,7 +53,7 @@ export class ComponentSut<Component> {
   private async configureTestModule() {
     await TestBed.configureTestingModule({
       declarations: [this.componentDefinition],
-      imports: [SharedComponentsModule],
+      imports: [SharedComponentsModule, TodoModule],
       providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }],
     }).compileComponents();
   }
