@@ -1,9 +1,9 @@
-<div class="add_todo_container">
-  <div class="add_todo_input_container">
+<div class="container">
+  <div class="input_container">
     <input
       [ngClass]="{
-        add_todo_input: true,
-        add_todo_input_error: form.errorMessage
+        input: true,
+        input_error: form.errorMessage
       }"
       placeholder="Enter todo..."
       [(ngModel)]="form.todoTitle" />
@@ -13,7 +13,7 @@
     </span>
   </div>
 
-  <button class="add_todo_button" (click)="addTodo()">
+  <button class="button" (click)="addTodo()">
     Add Todo
     <mat-icon fontIcon="add" aria-label="Remove todo" />
   </button>

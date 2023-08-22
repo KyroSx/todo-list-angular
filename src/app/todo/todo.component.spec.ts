@@ -9,7 +9,7 @@ class Sut extends ComponentSut<TodoComponent> {
   }
 
   get add_todo_input() {
-    return this.getElement<HTMLInputElement>('.add_todo_input');
+    return this.getElement<HTMLInputElement>('.input');
   }
 
   get empty_state() {
@@ -21,7 +21,7 @@ class Sut extends ComponentSut<TodoComponent> {
   }
 
   get add_todo_button() {
-    return this.getElement<HTMLButtonElement>('.add_todo_button');
+    return this.getElement<HTMLButtonElement>('.button');
   }
 
   get filter_completed_button() {
@@ -37,7 +37,7 @@ class Sut extends ComponentSut<TodoComponent> {
   }
 
   get todo_list() {
-    const list = this.getAllElements<HTMLDivElement>('.todo_item');
+    const list = this.getAllElements<HTMLDivElement>('.todo_item_container');
 
     if (!list || list.length === 0) {
       throw new Error('List is Empty');
@@ -47,7 +47,7 @@ class Sut extends ComponentSut<TodoComponent> {
   }
 
   getTodoCheckbox(todo: HTMLDivElement): HTMLInputElement {
-    return todo.querySelector('.todo_item_checkbox')!;
+    return todo.querySelector('.checkbox')!;
   }
 
   getTodoTitle(todo: HTMLDivElement): HTMLSpanElement {
@@ -130,13 +130,13 @@ describe('TodoComponent', () => {
       sut.detectChanges();
 
       expect(sut.getTodoCheckbox(todo).checked).toBe(true);
-      expect(sut.getTodoTitle(todo)).toHaveClass('todo_item_completed');
+      expect(sut.getTodoTitle(todo)).toHaveClass('completed');
 
       sut.toggleTodo(todo);
       sut.detectChanges();
 
       expect(sut.getTodoCheckbox(todo).checked).toBe(false);
-      expect(sut.getTodoTitle(todo)).not.toHaveClass('todo_item_completed');
+      expect(sut.getTodoTitle(todo)).not.toHaveClass('completed');
     });
   }));
 
@@ -181,7 +181,7 @@ describe('TodoComponent', () => {
       sut.tick();
       sut.detectChanges();
 
-      expect(sut.add_todo_input).toHaveClass('add_todo_input_error');
+      expect(sut.add_todo_input).toHaveClass('input_error');
       expect(sut.error_message.textContent).toContain(TodoBlank.message);
 
       sut.typeOnAddTodoInput(TODO);
@@ -193,7 +193,7 @@ describe('TodoComponent', () => {
       sut.tick();
       sut.detectChanges();
 
-      expect(sut.add_todo_input).not.toHaveClass('add_todo_input_error');
+      expect(sut.add_todo_input).not.toHaveClass('input_error');
       expect(sut.error_message).toBeNull();
     }));
   });

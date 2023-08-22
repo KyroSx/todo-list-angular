@@ -5,7 +5,7 @@
   padding: 20px 0;
 }
 
-.todo_item {
+.todo_item_container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -14,7 +14,7 @@
   padding: 8px;
 }
 
-.todo_item_info {
+.todo_item {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -22,23 +22,23 @@
   gap: 12px;
 }
 
-.todo_item_checkbox {
+.checkbox {
   width: 30px;
   height: 30px;
 
   cursor: pointer;
 }
 
-.todo_item_completed {
+.completed {
   color: var(--secondary-color);
   text-decoration: line-through;
 }
 
-.todo_item_remove {
+.remove_icon {
   cursor: pointer;
   color: var(--text-color);
 }
 
-.todo_item_remove:hover {
+.remove_icon:hover {
   color: var(--warn-color);
 }
