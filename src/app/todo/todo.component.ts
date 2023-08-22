@@ -27,8 +27,8 @@ export class TodoComponent {
     });
   }
 
-  get hasTodos() {
-    return this.todos.length > 0;
+  get hasNoTodos() {
+    return this.todos.length <= 0;
   }
 
   addTodo() {

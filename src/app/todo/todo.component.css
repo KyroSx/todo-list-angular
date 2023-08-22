@@ -42,20 +42,3 @@
 .todo_item_remove:hover {
   color: var(--warn-color);
 }
-
-.empty_state {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin-top: 100px;
-  gap: 100px;
-}
-
-.empty_state_subtitle {
-  font-size: 16px;
-}
-
-.empty_icon {
-  transform: scale(10);
-}
