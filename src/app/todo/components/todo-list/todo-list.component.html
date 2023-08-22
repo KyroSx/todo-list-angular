@@ -4,7 +4,7 @@
       <input
         class="todo_item_checkbox"
         type="checkbox"
-        (click)="onToggle(todo)"
+        (click)="toggleTodo(todo)"
         [checked]="todo.completed" />
 
       <span [ngClass]="{ todo_item_completed: todo.completed }">

@@ -46,10 +46,4 @@ export class TodoComponent {
       },
     });
   }
-
-  toggleTodo(todo: Todo) {
-    this.todosService.toggleTodo(todo).subscribe(() => {
-      this.getTodos();
-    });
-  }
 }

@@ -4,7 +4,4 @@
 
 <app-empty-state [show]="hasNoTodos" />
 
-<app-todo-list
-  [todos]="todos"
-  (refresh)="getTodos()"
-  (toggle)="toggleTodo($event)" />
+<app-todo-list [todos]="todos" (refresh)="getTodos()" />

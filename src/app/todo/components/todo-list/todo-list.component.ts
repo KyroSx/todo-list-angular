@@ -11,7 +11,6 @@ import { ConfirmationModalService } from '../../../services/confirmation-modal.s
 export class TodoListComponent {
   @Input() todos: Todo[] = [];
 
-  @Output() toggle = new EventEmitter<Todo>();
   @Output() refresh = new EventEmitter();
 
   constructor(
@@ -19,12 +18,18 @@ export class TodoListComponent {
     public modal: ConfirmationModalService
   ) {}
 
-  onToggle(todo: Todo) {
-    this.toggle.emit(todo);
+  toggleTodo(todo: Todo) {
+    this.todosService.toggleTodo(todo).subscribe(() => {
+      this.onSuccess();
+    });
   }
 
   removeTodo(todo: Todo) {
     this.openModalThenRemove(todo);
+  }
+
+  private onSuccess() {
+    this.refresh.emit();
   }
 
   private openModalThenRemove(todo: Todo) {
@@ -40,7 +45,7 @@ export class TodoListComponent {
 
   private removeThenReload(todo: Todo) {
     this.todosService.removeTodo(todo).subscribe(() => {
-      this.refresh.emit();
+      this.onSuccess();
     });
   }
 }
