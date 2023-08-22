@@ -1,0 +1,20 @@
+<div class="add_todo_container">
+  <div class="add_todo_input_container">
+    <input
+      [ngClass]="{
+        add_todo_input: true,
+        add_todo_input_error: form.errorMessage
+      }"
+      placeholder="Enter todo..."
+      [(ngModel)]="form.todoTitle" />
+
+    <span class="error_message" *ngIf="form.errorMessage">
+      {{ form.errorMessage }}
+    </span>
+  </div>
+
+  <button class="add_todo_button" (click)="onAddTodo()">
+    Add Todo
+    <mat-icon fontIcon="add" aria-label="Remove todo" />
+  </button>
+</div>
