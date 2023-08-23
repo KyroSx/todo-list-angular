@@ -1,0 +1,21 @@
+<div class="todo_list">
+  <div class="todo_item_container" *ngFor="let todo of todos">
+    <div class="todo_item">
+      <input
+        class="checkbox"
+        type="checkbox"
+        (click)="toggleTodo(todo)"
+        [checked]="todo.completed" />
+
+      <span [ngClass]="{ completed: todo.completed }">
+        {{ todo.title }}
+      </span>
+    </div>
+
+    <mat-icon
+      class="remove_icon"
+      fontIcon="delete"
+      aria-label="Remove todo"
+      (click)="removeTodo(todo)" />
+  </div>
+</div>

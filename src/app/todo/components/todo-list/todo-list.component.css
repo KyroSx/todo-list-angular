@@ -1,0 +1,44 @@
+.todo_list {
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  padding: 20px 0;
+}
+
+.todo_item_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 8px;
+}
+
+.todo_item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.checkbox {
+  width: 30px;
+  height: 30px;
+
+  cursor: pointer;
+}
+
+.completed {
+  color: var(--secondary-color);
+  text-decoration: line-through;
+}
+
+.remove_icon {
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.remove_icon:hover {
+  color: var(--warn-color);
+}
