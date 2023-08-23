@@ -2,7 +2,6 @@ import { TodoComponent } from './todo.component';
 import { ComponentSut } from '../testing/ComponentSut';
 import { fakeAsync } from '@angular/core/testing';
 import { TodoBlank } from '../errors';
-import { Filter } from '../models';
 
 class Sut extends ComponentSut<TodoComponent> {
   constructor() {
@@ -10,7 +9,7 @@ class Sut extends ComponentSut<TodoComponent> {
   }
 
   get add_todo_input() {
-    return this.getElement<HTMLInputElement>('.add_todo_input');
+    return this.getElement<HTMLInputElement>('.input');
   }
 
   get empty_state() {
@@ -22,15 +21,23 @@ class Sut extends ComponentSut<TodoComponent> {
   }
 
   get add_todo_button() {
-    return this.getElement<HTMLButtonElement>('.add_todo_button');
+    return this.getElement<HTMLButtonElement>('.button');
   }
 
-  get filter_container() {
-    return this.getElement<HTMLDivElement>('.filter_container');
+  get filter_completed_button() {
+    return this.getElement<HTMLButtonElement>('.button_completed > button');
+  }
+
+  get filter_uncompleted_button() {
+    return this.getElement<HTMLButtonElement>('.button_uncompleted > button');
+  }
+
+  get filter_view_all_button() {
+    return this.getElement<HTMLButtonElement>('.button_view_all > button');
   }
 
   get todo_list() {
-    const list = this.getAllElements<HTMLDivElement>('.todo_item');
+    const list = this.getAllElements<HTMLDivElement>('.todo_item_container');
 
     if (!list || list.length === 0) {
       throw new Error('List is Empty');
@@ -40,27 +47,23 @@ class Sut extends ComponentSut<TodoComponent> {
   }
 
   getTodoCheckbox(todo: HTMLDivElement): HTMLInputElement {
-    return todo.querySelector('.todo_item_checkbox')!;
+    return todo.querySelector('.checkbox')!;
   }
 
   getTodoTitle(todo: HTMLDivElement): HTMLSpanElement {
     return todo.querySelector('span')!;
   }
 
-  get confirm_button() {
-    return this.getElement<HTMLButtonElement>('#confirmation_modal_confirm');
-  }
-
   filterByCompleted() {
-    this.component.applyFilter(Filter.COMPLETED);
+    this.dispatchClickEvent(this.filter_completed_button);
   }
 
   filterByUncompleted() {
-    this.component.applyFilter(Filter.UNCOMPLETED);
+    this.dispatchClickEvent(this.filter_uncompleted_button);
   }
 
   filterByAll() {
-    this.component.applyFilter(Filter.ALL);
+    this.dispatchClickEvent(this.filter_view_all_button);
   }
 
   clickOnTodoButton() {
@@ -127,13 +130,13 @@ describe('TodoComponent', () => {
       sut.detectChanges();
 
       expect(sut.getTodoCheckbox(todo).checked).toBe(true);
-      expect(sut.getTodoTitle(todo)).toHaveClass('todo_item_completed');
+      expect(sut.getTodoTitle(todo)).toHaveClass('completed');
 
       sut.toggleTodo(todo);
       sut.detectChanges();
 
       expect(sut.getTodoCheckbox(todo).checked).toBe(false);
-      expect(sut.getTodoTitle(todo)).not.toHaveClass('todo_item_completed');
+      expect(sut.getTodoTitle(todo)).not.toHaveClass('completed');
     });
   }));
 
@@ -152,9 +155,7 @@ describe('TodoComponent', () => {
     sut.tick();
     sut.detectChanges();
 
-    sut.component.todos.removeTodo(
-      sut.component.todos.displayableTodos[REMOVED_INDEX]
-    );
+    sut.component.todosService.removeTodo(sut.component.todos[REMOVED_INDEX]);
     sut.detectChanges();
 
     TODOS.splice(REMOVED_INDEX, 1);
@@ -180,7 +181,7 @@ describe('TodoComponent', () => {
       sut.tick();
       sut.detectChanges();
 
-      expect(sut.add_todo_input).toHaveClass('add_todo_input_error');
+      expect(sut.add_todo_input).toHaveClass('input_error');
       expect(sut.error_message.textContent).toContain(TodoBlank.message);
 
       sut.typeOnAddTodoInput(TODO);
@@ -192,7 +193,7 @@ describe('TodoComponent', () => {
       sut.tick();
       sut.detectChanges();
 
-      expect(sut.add_todo_input).not.toHaveClass('add_todo_input_error');
+      expect(sut.add_todo_input).not.toHaveClass('input_error');
       expect(sut.error_message).toBeNull();
     }));
   });
@@ -200,8 +201,6 @@ describe('TodoComponent', () => {
   it('filters by completed and uncompleted', fakeAsync(() => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
     const TOGGLE_INDEX = [0, 2];
-
-    expect(sut.filter_container).toBeNull();
 
     TODOS.forEach(todo => {
       sut.typeOnAddTodoInput(todo);
@@ -242,8 +241,6 @@ describe('TodoComponent', () => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
     const TOGGLE_INDEX = [0, 2];
 
-    expect(sut.filter_container).toBeNull();
-
     TODOS.forEach(todo => {
       sut.typeOnAddTodoInput(todo);
       sut.detectChanges();
@@ -278,6 +275,8 @@ describe('TodoComponent', () => {
 
   it('displays empty state if there is no todos on filter', () => {
     const TODOS = ['TODO #1', 'TODO #2', 'TODO #3', 'TODO #4', 'TODO #5'];
+
+    expect(sut.empty_state).toBeDefined();
 
     TODOS.forEach(todo => {
       sut.typeOnAddTodoInput(todo);

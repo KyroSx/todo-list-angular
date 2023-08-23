@@ -1,67 +1,72 @@
 import { Injectable } from '@angular/core';
-import { Todo } from '../models';
+import { Filter, Todo } from '../models';
 import { TodoBlank } from '../errors';
+import { Observable, of, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodosService {
   private readonly todos: Todo[] = [];
-  public displayableTodos: Todo[] = [];
 
-  get hasTodos() {
-    return this.todos.length > 0;
+  getTodos(filter: Filter): Observable<Todo[]> {
+    // noinspection JSUnreachableSwitchBranches
+    switch (filter) {
+      case Filter.ALL:
+      default:
+        return of(this.todos);
+      case Filter.COMPLETED:
+        return of(this.filterByCompleted());
+      case Filter.UNCOMPLETED:
+        return of(this.filterByUncompleted());
+    }
   }
 
-  get hasNoDisplayableTodos() {
-    return this.displayableTodos.length <= 0;
+  addTodo(title: string): Observable<boolean> {
+    try {
+      this.addOrThrow(title);
+
+      return of(true);
+    } catch (error) {
+      return throwError(() => error);
+    }
   }
 
-  addTodo(title: string) {
+  private addOrThrow(title: string) {
     this.validateTodo(title);
 
     this.todos.push({
       title,
       completed: false,
     });
-
-    this.dispatch();
   }
 
-  filterByCompleted() {
-    this.displayableTodos = this.todos.filter(todo => todo.completed);
+  private filterByCompleted() {
+    return this.todos.filter(todo => todo.completed);
   }
 
-  filterByUncompleted() {
-    this.displayableTodos = this.todos.filter(todo => !todo.completed);
+  private filterByUncompleted() {
+    return this.todos.filter(todo => !todo.completed);
   }
 
-  resetFilter() {
-    this.dispatch();
-  }
-
-  toggleTodo(todo: Todo) {
+  toggleTodo(todo: Todo): Observable<boolean> {
     const foundTodo = this.findTodo(todo);
 
     if (foundTodo) {
       this.toggleComplete(todo);
     }
 
-    this.dispatch();
+    return of(true);
   }
 
-  removeTodo(todo: Todo) {
+  removeTodo(todo: Todo): Observable<boolean> {
     const foundTodo = this.findTodo(todo);
 
     if (foundTodo) {
       this.removeByIndex(this.getIndex(foundTodo));
     }
 
-    this.dispatch();
-  }
-
-  private dispatch() {
-    this.displayableTodos = this.todos;
+    return of(true);
   }
 
   private toggleComplete(todo: Todo) {

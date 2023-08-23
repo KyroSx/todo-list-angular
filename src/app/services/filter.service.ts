@@ -5,9 +5,13 @@ import { Filter } from '../models';
   providedIn: 'root',
 })
 export class FilterService {
-  current: Filter = Filter.ALL;
+  current = Filter.ALL;
 
   setToAll() {
     this.current = Filter.ALL;
+  }
+
+  setFilter(filter: Filter) {
+    this.current = filter;
   }
 }
